@@ -8,32 +8,43 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 
+import java.util.ArrayList;
+
 public class MainSearch extends AppCompatActivity {
-    private static ListView hikesList;
-    private static String[] hikes = new String[] {"Manoa Falls", "Lanikai Pillboxes", "Some other hike"};
+    private static ListView searchResultList;
+    private static ArrayList<String> hikes = new ArrayList<String>();
     SQLiteHelper myDB;
     EditText editSearch;
     Button searchButton;
     RadioButton radioButtonName, radioButtonLen, radioButtonDiff;
+    ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_search);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        //listView();
         myDB = new SQLiteHelper(this);
         editSearch = (EditText) findViewById(R.id.editText_Search);
         searchButton = (Button) findViewById(R.id.button_search);
         radioButtonName = (RadioButton) findViewById(R.id.searchName);
         radioButtonLen = (RadioButton) findViewById(R.id.searchLength);
         radioButtonDiff = (RadioButton) findViewById(R.id.searchDiff);
+        searchResultList = (ListView) findViewById(R.id.resultsListView);
+        adapter = new ArrayAdapter<String>(this, R.layout.hikes, hikes);
         search();
+        listView();
+    }
+
+    public void listView()
+    {
+        searchResultList.setAdapter(adapter);
     }
 
     public void search()
@@ -43,6 +54,11 @@ public class MainSearch extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Cursor res;
+
+                        if(!hikes.isEmpty())
+                        {
+                            hikes.clear();
+                        }
 
                         if(radioButtonName.isChecked())
                         {
@@ -61,18 +77,13 @@ public class MainSearch extends AppCompatActivity {
                             showMessage("Error", "No data found.");
                             return;
                         }
-                        else
-                        {
-                            StringBuffer buffer = new StringBuffer();
-                            while(res.moveToNext())
-                            {
-                                buffer.append("Name :" + res.getString(0) + "\n");
-                                buffer.append("Length :" + res.getString(1) + "\n");
-                                buffer.append("Difficulty :" + res.getString(2) + "\n\n");
+                        else {
+                            while (res.moveToNext()) {
+                                hikes.add("Name:" + res.getString(0) + ", Length:" + res.getString(1)
+                                        + ", Difficulty:" + res.getString(2) + "\n\n");
                             }
-
-                            showMessage("Data", buffer.toString());
                         }
+                        adapter.notifyDataSetChanged();
                     }
                 }
         );
