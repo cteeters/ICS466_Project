@@ -1,5 +1,8 @@
+When importing the project into Android Studio, please be sure to import the project from the 
+"OahuHikes" folder, not the "ICS466_Project" folder. Not doing this may not make it runnable.
+
 To run for the first time, you must first add the hikes.db file to your RUNNING AVD.
-To do, from Android Studiothis click...
+To do, from Android Studio this click...
 Tools > Android > Android Device Monitor
 In the new window, click on the File Explorer tab, then navigate to...
 data/data/ics466.oahuhikes/databases
