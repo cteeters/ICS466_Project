@@ -38,6 +38,7 @@ public class SQLiteHelper extends SQLiteOpenHelper
     public Cursor search(String searchParam, String searchBy)
     {
         SQLiteDatabase db = this.getWritableDatabase();
+        searchParam.trim();
         Cursor res = db.query(TABLE_NAME, new String[] {COL2, COL3, COL4}, searchBy + "=" + searchParam, null, null, null, "NAME", null);
         return res;
     }
