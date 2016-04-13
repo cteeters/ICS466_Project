@@ -14,6 +14,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
 
+import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
+
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class MainSearch extends AppCompatActivity {
@@ -22,7 +26,7 @@ public class MainSearch extends AppCompatActivity {
     SQLiteHelper myDB;
     EditText editSearch;
     Button searchButton;
-    RadioButton radioButtonName, radioButtonLen, radioButtonDiff;
+    RadioButton radioButtonName, radioButtonLen, radioButtonDiff, radioButtonRate;
     ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,7 @@ public class MainSearch extends AppCompatActivity {
         radioButtonName = (RadioButton) findViewById(R.id.searchName);
         radioButtonLen = (RadioButton) findViewById(R.id.searchLength);
         radioButtonDiff = (RadioButton) findViewById(R.id.searchDiff);
+        radioButtonRate = (RadioButton) findViewById(R.id.searchRating);
         searchResultList = (ListView) findViewById(R.id.resultsListView);
         adapter = new ArrayAdapter<String>(this, R.layout.hikes, hikes);
         search();
@@ -55,11 +60,6 @@ public class MainSearch extends AppCompatActivity {
                     public void onClick(View v) {
                         Cursor res;
 
-                        if(!myDB.checkExists())
-                        {
-                            showMessage("No Database", "Database not found.");
-                        }
-
                         if(!hikes.isEmpty())
                         {
                             hikes.clear();
@@ -73,6 +73,10 @@ public class MainSearch extends AppCompatActivity {
                         {
                             res = myDB.search(editSearch.getText().toString(), "LENGTH");
                         }
+                        else if(radioButtonRate.isChecked())
+                        {
+                            res = myDB.search(editSearch.getText().toString(), "RATING");
+                        }
                         else
                         {
                             res = myDB.search(editSearch.getText().toString(), "DIFFICULTY");
@@ -85,7 +89,7 @@ public class MainSearch extends AppCompatActivity {
                         else {
                             while (res.moveToNext()) {
                                 hikes.add("Name:" + res.getString(0) + ", Length:" + res.getString(1)
-                                        + ", Difficulty:" + res.getString(2) + "\n\n");
+                                        + ", Difficulty:" + res.getString(2) + ", Rating:" + res.getString(3) + "\n\n");
                             }
                         }
                         adapter.notifyDataSetChanged();
