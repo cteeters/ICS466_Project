@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 public class SQLiteHelper extends SQLiteOpenHelper
@@ -41,5 +42,18 @@ public class SQLiteHelper extends SQLiteOpenHelper
         searchParam.trim();
         Cursor res = db.query(TABLE_NAME, new String[] {COL2, COL3, COL4}, searchBy + "=" + searchParam, null, null, null, "NAME", null);
         return res;
+    }
+
+    public boolean checkExists()
+    {
+        SQLiteDatabase checkDB = null;
+        try {
+            checkDB = SQLiteDatabase.openDatabase(DATABASE_NAME, null,
+                    SQLiteDatabase.OPEN_READONLY);
+            checkDB.close();
+        } catch (SQLiteException e) {
+            // database doesn't exist yet.
+        }
+        return checkDB != null;
     }
 }

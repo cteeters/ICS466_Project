@@ -55,6 +55,11 @@ public class MainSearch extends AppCompatActivity {
                     public void onClick(View v) {
                         Cursor res;
 
+                        if(!myDB.checkExists())
+                        {
+                            showMessage("No Database", "Database not found.");
+                        }
+
                         if(!hikes.isEmpty())
                         {
                             hikes.clear();
