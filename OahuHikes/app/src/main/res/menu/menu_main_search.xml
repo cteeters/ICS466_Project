@@ -3,13 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="ics466.oahuhikes.MainSearch">
     <item
-        android:id="@+id/action_search_config"
+        android:id="@+id/credits"
         android:orderInCategory="100"
-        android:title="@string/config_search"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
+        android:title="Credits"
         app:showAsAction="never" />
 </menu>
