@@ -40,12 +40,16 @@ public class DisplayHikeInfo extends AppCompatActivity
         textLength.setText("Length: " + results.getString(1));
         textDiff.setText("Difficulty: " + results.getString(2));
         ratingBar.setRating(results.getFloat(3));
-
-//        Directions test
-        directions.setClickable(true);
-        directions.setMovementMethod(LinkMovementMethod.getInstance());
-        String text = "<a href='https://www.google.com/maps/place/Koko+Crater+Arch,+8483+HI-72,+Honolulu,+HI+96825/@21.2815724,-157.690732,15z/data=!3m1!4b1!4m2!3m1!1s0x7c001216253edcf7:0x9ef1880d4efab896'> Google Maps </a>";
-        directions.setText(Html.fromHtml(text));
+        if(!results.getString(4).equals("N/A")) {
+            directions.setClickable(true);
+            directions.setMovementMethod(LinkMovementMethod.getInstance());
+            String text = "<a href='" + results.getString(4) + "'> Google Maps </a>";
+            directions.setText(Html.fromHtml(text));
+        }
+        else
+        {
+            directions.setText("Map unavailable.");
+        }
     }
 
 }

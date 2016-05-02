@@ -24,6 +24,7 @@ public class SQLiteHelper extends SQLiteAssetHelper
     private static final String COL3 = "LENGTH";
     private static final String COL4 = "DIFFICULTY";
     private static final String COL5 = "RATING";
+    private static final String COL6 = "DIRECTIONS";
     private SQLiteDatabase myDB;
     private final Context context;
 
@@ -44,7 +45,7 @@ public class SQLiteHelper extends SQLiteAssetHelper
     {
         SQLiteDatabase db = this.getWritableDatabase();
         searchParam.trim();
-        Cursor res = db.query(TABLE_NAME, new String[] {COL2, COL3, COL4, COL5}, searchBy + "= '" + searchParam + "'", null, null, null, "NAME", null);
+        Cursor res = db.query(TABLE_NAME, new String[] {COL2, COL3, COL4, COL5, COL6}, searchBy + " LIKE '%" + searchParam + "%'", null, null, null, "NAME", null);
         return res;
     }
 }
