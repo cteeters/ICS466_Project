@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ public class MainSearch extends AppCompatActivity {
     EditText editSearch;
     Button searchButton;
     RadioButton radioButtonName, radioButtonLen, radioButtonDiff, radioButtonRate;
+    RadioGroup radioButtonGroup;
     ArrayAdapter<String> adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,7 @@ public class MainSearch extends AppCompatActivity {
         radioButtonDiff = (RadioButton) findViewById(R.id.searchDiff);
         radioButtonRate = (RadioButton) findViewById(R.id.searchRating);
         searchResultList = (ListView) findViewById(R.id.resultsListView);
+        radioButtonGroup = (RadioGroup) findViewById(R.id.radioGroup);
         adapter = new ArrayAdapter<String>(this, R.layout.hikes, hikes);
         search();
         listView();
@@ -74,8 +77,7 @@ public class MainSearch extends AppCompatActivity {
     {
         searchResultList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Object listItem = searchResultList.getItemAtPosition(position);
                 Intent intent = new Intent(MainSearch.this, DisplayHikeInfo.class);
                 String data = listItem.toString();
@@ -98,34 +100,31 @@ public class MainSearch extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         Cursor res;
+                        hideSoftKeyboard();
 
-                        if(!hikes.isEmpty())
-                        {
+                        if (!hikes.isEmpty()) {
                             hikes.clear();
                         }
 
-                        if(radioButtonName.isChecked())
-                        {
+                        if (radioButtonName.isChecked()) {
                             res = myDB.search(editSearch.getText().toString(), "NAME");
-                        }
-                        else if(radioButtonLen.isChecked())
-                        {
+                        } else if (radioButtonLen.isChecked()) {
                             res = myDB.search(editSearch.getText().toString(), "LENGTH");
-                        }
-                        else if(radioButtonRate.isChecked())
-                        {
+                        } else if (radioButtonRate.isChecked()) {
                             res = myDB.search(editSearch.getText().toString(), "RATING");
-                        }
-                        else
-                        {
+                        } else {
                             res = myDB.search(editSearch.getText().toString(), "DIFFICULTY");
                         }
-                        if(res.getCount() == 0)
-                        {
-                            showMessage("Error", "No data found.");
+                        if (res.getCount() == 0) {
+                            if (radioButtonRate.isChecked()) {
+                                showMessage("Error", "Ratings must be from 1-5");
+                            } else if (radioButtonDiff.isChecked()) {
+                                showMessage("Error", "Difficulty must be from 1-4");
+                            } else {
+                                showMessage("Error", "No data found.");
+                            }
                             return;
-                        }
-                        else {
+                        } else {
                             while (res.moveToNext()) {
                                 hikes.add("Name:" + res.getString(0) + "\nLength:" + res.getString(1)
                                         + "\nDifficulty:" + res.getString(2) + "\nRating:" + res.getString(3) + "\n\n");
@@ -168,5 +167,15 @@ public class MainSearch extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    /*
+    http://stackoverflow.com/questions/18977187/how-to-hide-soft-keyboard-when-activity-starts/18977227#18977227
+     */
+    public void hideSoftKeyboard() {
+        if(getCurrentFocus()!=null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        }
     }
 }
