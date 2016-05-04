@@ -79,7 +79,7 @@ public class MainSearch extends AppCompatActivity {
                 Object listItem = searchResultList.getItemAtPosition(position);
                 Intent intent = new Intent(MainSearch.this, DisplayHikeInfo.class);
                 String data = listItem.toString();
-                String hikeName = data.substring(5, data.indexOf(','));
+                String hikeName = data.substring(5, data.indexOf('\n'));
                 intent.putExtra("name", hikeName);
                 startActivity(intent);
             }
@@ -127,8 +127,8 @@ public class MainSearch extends AppCompatActivity {
                         }
                         else {
                             while (res.moveToNext()) {
-                                hikes.add("Name:" + res.getString(0) + ", Length:" + res.getString(1)
-                                        + ", Difficulty:" + res.getString(2) + ", Rating:" + res.getString(3) + "\n\n");
+                                hikes.add("Name:" + res.getString(0) + "\nLength:" + res.getString(1)
+                                        + "\nDifficulty:" + res.getString(2) + "\nRating:" + res.getString(3) + "\n\n");
                             }
                         }
                         adapter.notifyDataSetChanged();
