@@ -37,8 +37,8 @@ public class DisplayHikeInfo extends AppCompatActivity
 
         results.moveToNext();
         textName.setText(results.getString(0));
-        textLength.setText("Length: " + results.getString(1));
-        textDiff.setText("Difficulty: " + results.getString(2) + "of 4");
+        textLength.setText("Length: Approximately " + results.getString(1) + " miles");
+        textDiff.setText("Difficulty: " + results.getString(2) + " out of 4");
         ratingBar.setRating(results.getFloat(3));
         if(!results.getString(4).equals("N/A")) {
             directions.setClickable(true);

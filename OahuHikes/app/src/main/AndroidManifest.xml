@@ -20,7 +20,7 @@
         </activity>
         <activity
             android:name=".DisplayHikeInfo"
-            android:label="@string/title_activity_display_hike_info"
+            android:label="Hike Information"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Credits"
